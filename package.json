@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "fakerator": "^0.3.1",
+    "gerar-cpf": "^2.0.3",
+    "pg": "^8.3.2"
+  },
+  "scripts": {
+    "create": "node src/main.js"
+  }
+}
