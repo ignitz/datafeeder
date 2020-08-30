@@ -1,11 +1,20 @@
 {
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "fakerator": "^0.3.1",
     "gerar-cpf": "^2.0.3",
-    "pg": "^8.3.2"
+    "pg": "^8.3.2",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.4"
   },
   "scripts": {
-    "create": "node src/main.js"
+    "create": "node src/main.js",
+    "dev": "NODE_PATH=./src nodemon src/server.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "sequelize-cli": "^6.2.0"
   }
 }
