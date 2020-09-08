@@ -1,4 +1,6 @@
 const User = require("models/sqlserver/User");
+const Address = require("models/sqlserver/Address");
+const Company = require("models/sqlserver/Company");
 const Fakerator = require("fakerator");
 const gerarCPF = require("gerar-cpf");
 const bcrypt = require("bcrypt");
@@ -10,7 +12,11 @@ const { fillArray } = require("../../utils/array");
 
 const simulate = async (params) => {
   const { nrows } = params;
-  await createUser(nrows);
+  const created_ids = await createUser(nrows);
+  for (created_id of created_ids) {
+    createAddress(created_id);
+    createCompany(created_id);
+  }
 };
 
 const createUser = async (nrows = 1) => {
@@ -49,14 +55,12 @@ const createUser = async (nrows = 1) => {
 
     const ipChoice = getChoice(["ipv4", "ipv6"]);
 
-    const firstName =
-      genderChoice == "M"
-        ? fakerator.names.firstNameM()
-        : fakerator.names.firstNameF();
-    const lastName =
-      genderChoice == "M"
-        ? fakerator.names.lastNameM()
-        : fakerator.names.lastNameF();
+    const firstName = genderChoice == "M"
+      ? fakerator.names.firstNameM()
+      : fakerator.names.firstNameF();
+    const lastName = genderChoice == "M"
+      ? fakerator.names.lastNameM()
+      : fakerator.names.lastNameF();
 
     const user = {
       cpf: gerarCPF("xxx.xxx.xxx-xx"),
@@ -73,20 +77,53 @@ const createUser = async (nrows = 1) => {
   }
 
   const results = await User.bulkCreate(users);
-  console.log(results.map((user) => user.dataValues.id));
+  const creted_ids = results.map((user) => user.dataValues.id);
 
-  // await createAddress();
-
-  return true;
+  return creted_ids;
 };
 
-const createAddress = async () => {
+const updateAddress = async () => {
   const [results, metadata] = await sqlserver.query(
-    "SELECT TOP 1 id FROM register.dbo.users ORDER BY NEWID()"
+    "SELECT TOP 1 id FROM register.dbo.users ORDER BY NEWID()",
   );
   console.log(metadata);
   console.log(results);
   return true;
+};
+
+const createAddress = async (user_id) => {
+  const fakerator = Fakerator();
+  const { country, countryCode, state, city, street, zip, geo } = fakerator
+    .entity.address();
+  const { latitude, longitude } = geo;
+  const { dataValues } = await Address.create({
+    user_id,
+    country,
+    countryCode,
+    state,
+    city,
+    street,
+    zipcode: zip,
+    latitude,
+    longitude,
+  });
+
+  return dataValues;
+};
+
+const createCompany = async (user_id) => {
+  const user = await User.findByPk(user_id);
+
+  const fakerator = Fakerator();
+  const { name, email, phone, website } = fakerator.entity.company();
+
+  const [company] = await Company.findOrCreate({
+    where: { name, email, phone, website },
+  });
+
+  const { dataValues } = user.addCompany(company);
+
+  return { dataValues, company };
 };
 
 module.exports = {

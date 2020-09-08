@@ -52,7 +52,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      countryCode: {
+      country_code: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -89,9 +89,75 @@ module.exports = {
         allowNull: false,
       },
     });
+
+    await queryInterface.createTable("companies", {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+      },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      phone: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      website: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+    });
+
+    await queryInterface.createTable("users_companies", {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+      },
+      user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "users", key: "id" },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+      company_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "companies", key: "id" },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+    });
   },
 
   down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable("users_companies");
+    await queryInterface.dropTable("companies");
     await queryInterface.dropTable("addresses");
     await queryInterface.dropTable("users");
   },

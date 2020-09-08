@@ -6,17 +6,22 @@ class User extends Model {
       {
         cpf: DataTypes.STRING,
         name: DataTypes.STRING,
+        email: DataTypes.STRING,
         gender: DataTypes.STRING,
         birth_date: DataTypes.DATEONLY,
       },
       {
         sequelize,
-      }
+      },
     );
   }
 
   static associate(models) {
     this.hasMany(models.Address, { foreignKey: "user_id", as: "addresses" });
+    this.belongsToMany(
+      models.Company,
+      { foreignKey: "user_id", through: "users_companies", as: "companies" },
+    );
   }
 }
 
