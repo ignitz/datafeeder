@@ -23,6 +23,32 @@ criar um terceiro database que vai representar os dados que eu quero no final.
 docker-compose -f tests/docker-compose.development.yml up -d --build
 ```
 
+Create database, if not exist
+
+```
+yarn sequelize db:create --env sqlserver
+yarn sequelize db:create --env postgres
+```
+
+Create table for this test
+
+```
+yarn sequelize db:migrate --env sqlserver --config src/config/database.js --migrations-path src/database/migrations/sqlserver
+yarn sequelize db:migrate --env postgres --config src/config/database.js --migrations-path src/database/migrations/postgres
+```
+
+```js
+{
+  country: 'Mauritania',
+  countryCode: 'MR',
+  state: 'North Carolina',
+  city: 'Kristophermouth',
+  street: '623 Faye Ramp Apt. 675',
+  zip: '44060-0413',
+  geo: { latitude: -76.9092, longitude: -88.663 }
+}
+```
+
 ```shell
 FILE=.env
 if [ -f "$FILE" ]; then

@@ -1,11 +1,19 @@
-const { getChoice } = require("../utils/choice");
-const { fillArray } = require("../utils/array");
+const { simulate } = require("./simulate_microservices");
 
 const tasks = [];
 let counterId = 0;
 
 const getTasks = async (req, res) => {
-  return res.json(tasks.map((task) => task.id));
+  return res.json(
+    tasks.map((task) => {
+      return {
+        id: task.id,
+        intervalms: task.intervalms,
+        nrows: task.nrows,
+        enable: task.enable,
+      };
+    })
+  );
 };
 
 const createTask = async (req, res, next) => {
@@ -14,11 +22,16 @@ const createTask = async (req, res, next) => {
     if (!intervalms) throw new Error("No intervalms on body");
     if (!nrows) throw new Error("No nrows on body");
 
-    const task = {
+    const taskParams = {
       id: counterId,
-      task: setInterval(function () {
-        console.log("Inserted rows");
-      }, intervalms),
+      intervalms: intervalms,
+      nrows: nrows,
+      enable: true,
+    };
+
+    const task = {
+      ...taskParams,
+      task: setInterval(simulate, intervalms, taskParams),
     };
 
     tasks.push(task);
@@ -39,6 +52,7 @@ const deleteTask = async (req, res, next) => {
     if (!task) throw new Error("Not found task by ID");
 
     clearInterval(task.task);
+    task.enable = false;
 
     res.json({ success: true });
   } catch (error) {

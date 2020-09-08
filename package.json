@@ -12,7 +12,7 @@
   },
   "scripts": {
     "create": "node src/main.js",
-    "dev": "NODE_PATH=./src NODE_ENV=development nodemon src/server.js"
+    "dev": "NODE_PATH=./src NODE_ENV=development nodemon --delay 1500ms src/server.js"
   },
   "devDependencies": {
     "nodemon": "^2.0.4",
