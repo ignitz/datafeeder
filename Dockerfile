@@ -7,8 +7,8 @@ ADD yarn.lock /opt/app/yarn.lock
 
 WORKDIR /opt/app
 
-RUN yarn
+RUN yarn install --production
 
 EXPOSE 3333
 
-CMD ["yarn", "dev"]
+CMD ["yarn", "start"]

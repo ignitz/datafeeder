@@ -15,12 +15,12 @@ class Address extends Model {
       },
       {
         sequelize,
-      }
+      },
     );
   }
 
   static associate(models) {
-    this.belongsTo(models.User, { foreignKey: "user_id", as: "user" });
+    this.belongsTo(models.Person, { foreignKey: "person_id", as: "person" });
   }
 }
 

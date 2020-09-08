@@ -18,8 +18,8 @@ class Company extends Model {
 
   static associate(models) {
     this.belongsToMany(
-      models.User,
-      { foreignKey: "company_id", through: "users_companies", as: "users" },
+      models.Person,
+      { foreignKey: "company_id", through: "persons_companies", as: "persons" },
     );
   }
 }

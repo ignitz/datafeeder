@@ -11,8 +11,8 @@
     "tedious": "^9.2.1"
   },
   "scripts": {
-    "create": "node src/main.js",
-    "dev": "NODE_PATH=./src NODE_ENV=development nodemon --delay 1500ms src/server.js"
+    "dev": "NODE_PATH=./src NODE_ENV=development nodemon --delay 1500ms src/server.js",
+    "start": "NODE_PATH=./src NODE_ENV=production node src/server.js"
   },
   "devDependencies": {
     "nodemon": "^2.0.4",

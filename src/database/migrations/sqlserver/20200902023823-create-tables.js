@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("users", {
+    await queryInterface.createTable("persons", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -41,10 +41,10 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      user_id: {
+      person_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "users", key: "id" },
+        references: { model: "persons", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
@@ -123,17 +123,17 @@ module.exports = {
       },
     });
 
-    await queryInterface.createTable("users_companies", {
+    await queryInterface.createTable("persons_companies", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      user_id: {
+      person_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "users", key: "id" },
+        references: { model: "persons", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
@@ -156,9 +156,9 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("users_companies");
+    await queryInterface.dropTable("persons_companies");
     await queryInterface.dropTable("companies");
     await queryInterface.dropTable("addresses");
-    await queryInterface.dropTable("users");
+    await queryInterface.dropTable("persons");
   },
 };
