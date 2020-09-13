@@ -17,6 +17,7 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       gender: {
         type: Sequelize.STRING(2),

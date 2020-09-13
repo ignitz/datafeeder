@@ -11,6 +11,7 @@ const getTasks = async (req, res) => {
         intervalms: task.intervalms,
         nrows: task.nrows,
         enable: task.enable,
+        op: task.op,
       };
     })
   );
@@ -18,7 +19,7 @@ const getTasks = async (req, res) => {
 
 const createTask = async (req, res, next) => {
   try {
-    const { intervalms, nrows } = req.body;
+    const { intervalms, nrows, op } = req.body;
     if (!intervalms) throw new Error("No intervalms on body");
     if (!nrows) throw new Error("No nrows on body");
 
@@ -27,6 +28,7 @@ const createTask = async (req, res, next) => {
       intervalms: intervalms,
       nrows: nrows,
       enable: true,
+      op: op,
     };
 
     const task = {
