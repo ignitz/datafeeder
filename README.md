@@ -1,23 +1,6 @@
-escolher genero
+# Datafeeder
 
-nome m ou F
-
-id, userId, nome, genero, idade, endereco, createdAt
-
-```
-yarn sequelize db:create
-```
-
-dois databases
-
-um database com cadastro e dados dos usuarios
-
-umm com username e dados de rastreio
-
-criar um alimentador de dados padrão e simples
-settimeout parametrizado para criar os dados nos databases
-distribuir os dados probabiliscamente para simular falta de dasoe trenas tabela
-criar um terceiro database que vai representar os dados que eu quero no final.
+> Niitsuma Yuri <yuriniitsuma@gmail.com>
 
 ```
 docker-compose -f tests/docker-compose.development.yml up -d --build
@@ -37,53 +20,51 @@ yarn sequelize db:migrate --env sqlserver --config src/config/database.js --migr
 yarn sequelize db:migrate --env postgres --config src/config/database.js --migrations-path src/database/migrations/postgres
 ```
 
-```js
-{
-  country: 'Mauritania',
-  countryCode: 'MR',
-  state: 'North Carolina',
-  city: 'Kristophermouth',
-  street: '623 Faye Ramp Apt. 675',
-  zip: '44060-0413',
-  geo: { latitude: -76.9092, longitude: -88.663 }
+<!-- ```
+yarn sequelize migration:generate \
+  --env postgres \
+  --name create-tables \
+  --migrations-path src/database/migrations/postgres
+``` -->
+
+## REST
+
+`TOKEN` is a constant defined by environment variable.
+
+Generate records
+
+- op
+  - "create": Only create records
+  - "update": Only update records
+  - "delete": Will not be implemented
+  - if this param is ignored, then will be executed random by probability: created 2/3, update 1/3
+
+```shell
+curl --request POST \
+  --url http://localhost:3333/api/v1/microservices \
+  --header 'authorization: Bearer [TOKEN]' \
+  --header 'content-type: application/json' \
+  --data '{
+	"intervalms": 1000,
+	"nrows": 10,
+	"op": "create"
 }
+'
 ```
 
+Get list of Tasks
+
 ```shell
-FILE=.env
-if [ -f "$FILE" ]; then
-    source $FILE
-fi
-
-ENVIRONMENT=development
-SEQUELIZECLI="yarn sequelize"
-
-DATABASE=sqlserver
-
-$SEQUELIZECLI model:generate --name User \
-  --attributes firstName:string,lastName:string,email:string \
-  --env $ENVIRONMENT \
-  --config $NODE_PATH/config/database/$DATABASE.js \
-  --models-path $NODE_PATH/models/$DATABASE \
-  --migrations-path $NODE_PATH/database/migrations/$DATABASE \
-  --seeders-path $NODE_PATH/database/seeders/$DATABASE
+curl --request GET \
+  --url http://localhost:3333/api/v1/microservices \
+  --header 'authorization: Bearer [TOKEN]'
 ```
 
+Stop task
+
 ```shell
-FILE=.env
-if [ -f "$FILE" ]; then
-    source $FILE
-fi
-
-ENVIRONMENT=development
-SEQUELIZECLI="yarn sequelize"
-
-DATABASE=sqlserver
-
-yarn sequelize db:migrate \
-  --env $ENVIRONMENT \
-  --config $NODE_PATH/config/database/$DATABASE.js \
-  --models-path $NODE_PATH/models/$DATABASE \
-  --migrations-path $NODE_PATH/database/migrations/$DATABASE \
-  --seeders-path $NODE_PATH/database/seeders/$DATABASE
+curl --request DELETE \
+  --url http://localhost:3333/api/v1/microservices/0 \
+  --header 'authorization: Bearer [TOKEN]' \
+  --header 'content-type: application/json'
 ```

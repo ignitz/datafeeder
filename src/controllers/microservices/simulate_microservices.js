@@ -239,8 +239,8 @@ const createCompany = async (person_id) => {
 
 const createPosts = async (user_id) => {
   fakerator = Fakerator();
-  // const numberOfPosts = fakerator.random.number(30);
-  const numberOfPosts = 1;
+  const numberOfPosts = fakerator.random.number(30);
+
   const posts = [];
 
   for (let i = 0; i < numberOfPosts; i++) {
