@@ -44,7 +44,18 @@ services:
       - SQLSERVER_HOST=sqlserver
       - NODE_PATH=./src
       - TOKEN=${TOKEN}
-    command: bash -c "yarn sequelize db:create --env sqlserver --config src/config/database.js && yarn sequelize db:migrate --env sqlserver --config src/config/database.js --migrations-path src/database/migrations/sqlserver && yarn start"
+    command: >
+      bash -c "yarn sequelize db:create --env sqlserver
+      --config src/config/database.js &&
+      yarn sequelize db:migrate --env sqlserver
+      --config src/config/database.js
+      --migrations-path src/database/migrations/sqlserver &&
+      yarn sequelize db:create --env postgres
+      --config src/config/database.js &&
+      yarn sequelize db:migrate --env postgres
+      --config src/config/database.js
+      --migrations-path src/database/migrations/postgres &&
+      yarn start"
     networks:
       - databases
 
